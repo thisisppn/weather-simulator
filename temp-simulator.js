@@ -3,10 +3,10 @@ if (process.argv.length <= 2) {
     console.log("Usage: node " + __filename + " <city_id>");
     process.exit(-1);
 }
- 
+
 var param = process.argv[2];
 
-var socket = io('http://localhost:8081');
+var socket = io('http://localhost');
 
 var fs = require('fs');
 var obj = JSON.parse(fs.readFileSync('cities-name-list.json', 'utf8'));

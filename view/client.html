@@ -1,1 +1,51 @@
-This is the client
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    </head>
+    <title>Temperature client</title>
+    <body>
+        <div class="container col-md-offset-2 col-md-8">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading centre">Real time temperature</div>
+
+                <!-- Table -->
+                <table class="table" id="city-list">
+                    <tr>
+                        <th>City</th>
+                        <th>Temperature(C)</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://localhost');
+    console.log(socket);
+    socket.on('connect', function(){
+        $("#connection-status").html('Connected');
+        socket.emit('subscribe', {room:'client'});
+
+        socket.on('temp-update', function(data){
+            console.log(data);
+            if ($('#'+data.city).length) {
+                // if the element exists, then update its temperature value.
+                $('#'+data.city+'-temp').html(data.temp);
+            } else {
+                // else, add the element inside city-list
+                $('#city-list').append('<tr id="'+data.city+'"> <td id="'+data.city+'-city">'+data.city+'</td> <td id="'+data.city+'-temp">'+data.temp+'</td> </tr>');
+            }
+        });
+    });
+</script>
