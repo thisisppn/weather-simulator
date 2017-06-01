@@ -1,0 +1,1 @@
+killall -q node temp-simulator.js

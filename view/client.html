@@ -31,7 +31,7 @@
 <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    var socket = io.connect('http://localhost');
+    var socket = io.connect('http://localhost:8081');
     console.log(socket);
     socket.on('connect', function(){
         $("#connection-status").html('Connected');
@@ -39,12 +39,13 @@
 
         socket.on('temp-update', function(data){
             console.log(data);
-            if ($('#'+data.city).length) {
+            city = data.city.replace(/\s+/g, '-').toLowerCase();
+            if ($('#'+city).length) {
                 // if the element exists, then update its temperature value.
-                $('#'+data.city+'-temp').html(data.temp);
+                $('#'+city+'-temp').html(data.temp);
             } else {
                 // else, add the element inside city-list
-                $('#city-list').append('<tr id="'+data.city+'"> <td id="'+data.city+'-city">'+data.city+'</td> <td id="'+data.city+'-temp">'+data.temp+'</td> </tr>');
+                $('#city-list').append('<tr id="'+city+'"> <td id="'+city+'-city">'+data.city+'</td> <td id="'+city+'-temp">'+data.temp+'</td> </tr>');
             }
         });
     });

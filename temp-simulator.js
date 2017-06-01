@@ -6,7 +6,7 @@ if (process.argv.length <= 2) {
 
 var param = process.argv[2];
 
-var socket = io('http://localhost');
+var socket = io('http://localhost:8081');
 
 var fs = require('fs');
 var obj = JSON.parse(fs.readFileSync('cities-name-list.json', 'utf8'));
@@ -25,5 +25,5 @@ socket.on('connect', function(){
     setInterval(function(){
         // socket.emit('temp-update', {city: getRandomInt(0,40)});
         socket.emit('temp-update', {city: city, temp:getRandomInt(0,40)});
-    }, 1000);
+    }, 5000);
 });
