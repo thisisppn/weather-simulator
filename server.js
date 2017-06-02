@@ -9,7 +9,6 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-  console.log("Someone connected to the server");
   socket.on('temp-update', function (data) {
     // Publish this temperature to all clients
     // sending to all clients in 'client' room except sender
@@ -17,11 +16,12 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function(data){
-    console.log("A socket disconnected");
+    console.log(socket.id+" disconnected");
   });
 
   socket.on('subscribe', function(data){
-    socket.join('client');
+    socket.join(data.room);
+    console.log(data.room+' connected to the server.');
   });
 
 });

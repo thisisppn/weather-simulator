@@ -1,5 +1,6 @@
 <html>
     <head>
+        <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -12,9 +13,9 @@
     <title>Temperature client</title>
     <body>
         <div class="container col-md-offset-2 col-md-8">
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel-temperature">
                 <!-- Default panel contents -->
-                <div class="panel-heading centre">Real time temperature</div>
+                <div class="panel-heading centre" id="panel-temperature-heading">Real time temperature</div>
 
                 <!-- Table -->
                 <table class="table" id="city-list">
@@ -28,17 +29,23 @@
     </body>
 </html>
 
-<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
+
+    var changeStatus = function(className, msg){
+        $('#panel-temperature').removeClass();
+        $('#panel-temperature').addClass('panel '+className);
+        $('#panel-temperature-heading').html(msg);
+    }
+
     var socket = io.connect('http://localhost:8081');
-    console.log(socket);
+
     socket.on('connect', function(){
-        $("#connection-status").html('Connected');
+        changeStatus('panel-success', 'Connected to server');
+
         socket.emit('subscribe', {room:'client'});
 
         socket.on('temp-update', function(data){
-            console.log(data);
             city = data.city.replace(/\s+/g, '-').toLowerCase();
             if ($('#'+city).length) {
                 // if the element exists, then update its temperature value.
@@ -48,5 +55,20 @@
                 $('#city-list').append('<tr id="'+city+'"> <td id="'+city+'-city">'+data.city+'</td> <td id="'+city+'-temp">'+data.temp+'</td> </tr>');
             }
         });
+    });
+    socket.on('connect_failed', function(){
+        changeStatus('panel-danger', 'Connection to server failed.');
+    });
+
+    socket.on('reconnect_attempt', function(){
+        changeStatus('panel-warning', 'Attempting reconnection to server.');
+    });
+
+    socket.on('reconnect', function(){
+        changeStatus('panel-success', 'Reconnected to server successfully.');
+    });
+
+    socket.on('reconnect_failed', function(){
+        changeStatus('panel-danger', 'Reconnection failed: Looks like the server is down, please try again later');
     });
 </script>

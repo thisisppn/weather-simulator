@@ -12,7 +12,13 @@ var fs = require('fs');
 var obj = JSON.parse(fs.readFileSync('cities-name-list.json', 'utf8'));
 
 city = obj[param];
-console.log(city);
+
+if(city === undefined){
+    console.log('Invalid cityID provided. Max cityID is '+obj.length);
+    process.exit(-1);
+}
+
+console.log('Providing temperature for '+city);
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -22,8 +28,26 @@ function getRandomInt(min, max) {
 
 socket.on('connect', function(){
     console.log("Connected to server");
+    socket.emit('subscribe',{room:'temp'});
+
     setInterval(function(){
-        // socket.emit('temp-update', {city: getRandomInt(0,40)});
         socket.emit('temp-update', {city: city, temp:getRandomInt(0,40)});
     }, 5000);
+});
+
+socket.on('connect_failed', function(){
+    console.log('Connection to server failed');
+});
+
+socket.on('reconnect_attempt', function(){
+    console.log('Attempting to reconnect to server.');
+});
+
+socket.on('reconnect', function(){
+    console.log('Reconnected to server successfully');
+});
+
+socket.on('reconnect_failed', function(){
+    console.log('Reconnection failed: Looks like the server is down, please try again later');
+    process.exit(-1);
 });
