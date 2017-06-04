@@ -33,6 +33,7 @@
 <script>
 
     var changeStatus = function(className, msg){
+        //This function changes the class and message of the panel header to show connection status
         $('#panel-temperature').removeClass();
         $('#panel-temperature').addClass('panel '+className);
         $('#panel-temperature-heading').html(msg);
@@ -43,8 +44,10 @@
     socket.on('connect', function(){
         changeStatus('panel-success', 'Connected to server');
 
+        //Subscribe as a web client
         socket.emit('subscribe', {room:'client'});
 
+        //On receiving an update from the server
         socket.on('temp-update', function(data){
             city = data.city.replace(/\s+/g, '-').toLowerCase();
             if ($('#'+city).length) {

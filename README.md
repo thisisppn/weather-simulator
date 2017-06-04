@@ -8,7 +8,7 @@ This project has been developed in a linux environment(Ubuntu 14.04) with Node v
 - cd into the directory (`cd weather-simulator/`)
 - execute `npm install` in the directory to install all the dependencies.
 - To start the server, execute `node server.js`. Then goto [localhost:8081](http://localhost:8081) on your browser. This is the web client.
-- To start the temperature simulator, execute `node temp-simulator.js 'city_id'`.'city_id' can be any number from 0 to 1200. This number is used to get the city name from the json file `weather-simulator/cities-name-list.json`. You can run multiple instances of the temp-simulator.js in multiple terminals.
+- To start the temperature simulator, execute `node temp-simulator.js 'city_id'`.'city_id' can be any number from 0 to 1200. This number is used to get the city name from the json file `weather-simulator/cities-name-list.json`. You can run multiple instances of the temp-simulator.js(`node temp-simulator.js 12`, `temp-simulator.js 445` etc.) in multiple terminals.
 - Now if you check the browser, you will see the temperatures getting updated every 3 second. 
 - As you keep adding more and more simulators(by executing the temp-simulator.js file in new terminals), the new cities get appended in the web client.
 

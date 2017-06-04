@@ -20,7 +20,7 @@ io.on('connection', function (socket) {
   });
 
   socket.on('subscribe', function(data){
-    socket.join(data.room);
+    socket.join(data.room); //Subscribe the socket to respective rooms(client/temp)
     console.log(data.room+' connected to the server.');
   });
 

@@ -14,13 +14,14 @@ var obj = JSON.parse(fs.readFileSync('cities-name-list.json', 'utf8'));
 city = obj[param];
 
 if(city === undefined){
-    console.log('Invalid cityID provided. Max cityID is '+obj.length);
+    console.log('Invalid cityID provided. Max cityID is '+obj.length-1);
     process.exit(-1);
 }
 
 console.log('Providing temperature for '+city);
 
 function getRandomInt(min, max) {
+  //Function to generate a random integer
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
@@ -28,11 +29,13 @@ function getRandomInt(min, max) {
 
 socket.on('connect', function(){
     console.log("Connected to server");
+    //Subscribe as a temperature simulator.
     socket.emit('subscribe',{room:'temp'});
 
+    //Update the temperature every 3 second
     setInterval(function(){
         socket.emit('temp-update', {city: city, temp:getRandomInt(0,40)});
-    }, 5000);
+    }, 3000);
 });
 
 socket.on('connect_failed', function(){
