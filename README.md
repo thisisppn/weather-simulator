@@ -21,8 +21,9 @@ This project has been developed in a linux environment(Ubuntu 14.04) with Node v
 ###### Mass testing
 To simulate thousands of temperature sensors, I wrote a small shell script that will run the temp-simulator.js as a background process. By default, the script runs 100 simulators. I tried doing 1000 in my system, but it froze(requires memory).
 
-- Execute, './start-simulators.sh
+- Execute, `./start-simulators.sh` from the `weather-simulator` directory.
 - Now, check the Web client, you should see a list of 100 cities with their respective temperatures (after 3 seconds of start)
-- To stop all the simulators, execute './stop-simulators.sh'
+- To stop all the simulators, execute `./stop-simulators.sh`
 # Further possible enhancements
 - Add database. This can help in providing temperature history of a particular city and several other statistics.
+- Provide real time temperature maps. Probaly a temperature overlay to google maps.
